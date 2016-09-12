@@ -129,46 +129,47 @@ class EventRunner {
     protected function ManageStartedEvents()
     {
        while ($this->schedules) {
+            if ($schedule instanceof Schedule) {
+                foreach ($this->schedules as $scheduleKey => $schedule) {
 
-            foreach ($this->schedules as $scheduleKey => $schedule) {
+                    $events = $schedule->events();
+                    foreach ($events as $eventKey => $event) {
 
-                $events = $schedule->events();
-                foreach ($events as $eventKey => $event) {
-
-                    $proc = $event->getProcess();
-                    if ($proc->isRunning()) {
-                        continue;
-                    }
-
-                    if ($proc->isSuccessful()) {
-
-                        $event->outputStream .= $proc->getOutput();
-                        $event->outputStream .= $this->invoke($event->afterCallbacks());
-
-                        if ($event->outputStream) {
-                            $this->handleOutput($event);
+                        $proc = $event->getProcess();
+                        if ($proc->isRunning()) {
+                            continue;
                         }
 
-                    } else {
+                        if ($proc->isSuccessful()) {
 
-                        // Calling registered error callbacks with an instance of $event as argument
-                        $this->invoke($schedule->errorCallbacks(), [$event]);
+                            $event->outputStream .= $proc->getOutput();
+                            $event->outputStream .= $this->invoke($event->afterCallbacks());
 
-                        $this->handleError($event);
+                            if ($event->outputStream) {
+                                $this->handleOutput($event);
+                            }
+
+                        } else {
+
+                            // Calling registered error callbacks with an instance of $event as argument
+                            $this->invoke($schedule->errorCallbacks(), [$event]);
+
+                            $this->handleError($event);
+
+                        }
+
+                        // Dismiss the event if it's finished
+                        $schedule->dismissEvent($eventKey);
 
                     }
 
-                    // Dismiss the event if it's finished
-                    $schedule->dismissEvent($eventKey);
-
-                }
-
-                // If there's no event left for the Schedule instance,
-                // run the schedule's after-callbacks and remove
-                // the Schedule from list of active schedules.                                                                                                                           zzzwwscxqqqAAAQ11
-                if (! count($schedule->events())) {
-                    $this->invoke($schedule->afterCallbacks());
-                    unset($this->schedules[$scheduleKey]);
+                    // If there's no event left for the Schedule instance,
+                    // run the schedule's after-callbacks and remove
+                    // the Schedule from list of active schedules.                                                                                                                           zzzwwscxqqqAAAQ11
+                    if (! count($schedule->events())) {
+                        $this->invoke($schedule->afterCallbacks());
+                        unset($this->schedules[$scheduleKey]);
+                    }
                 }
             }
         }

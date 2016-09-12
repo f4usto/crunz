@@ -1,5 +1,5 @@
 {
-    "name": "lavary/crunz",
+    "name": "f4usto/crunz",
     "description": "Schedule your tasks right from the code.",
     "type": "library",
     "keywords": [
@@ -12,17 +12,17 @@
         "Job Manager",
         "Event Runner"
     ],
-    "homepage": "https://github.com/lavary/crunz",
+    "homepage": "https://github.com/f4usto/crunz",
     "license": "MIT",
     "authors": [
         {
-            "name": "Reza M. Lavaryan",
-            "email": "mrl.8081@gmail.com"
+            "name": "F4usto",
+            "email": "f4usto@gmail.com"
          }
     ],
     "support": {
         "email": "mrl.8081@gmail.com",
-        "issues": "http://github.com/lavary/crunz/issues"
+        "issues": "http://github.com/f4usto/crunz/issues"
     },
     "require": {
         "php": ">=5.5",

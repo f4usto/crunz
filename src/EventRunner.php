@@ -129,9 +129,8 @@ class EventRunner {
     protected function ManageStartedEvents()
     {
        while ($this->schedules) {
-            if ($schedule instanceof Schedule) {
-                foreach ($this->schedules as $scheduleKey => $schedule) {
-
+            foreach ($this->schedules as $scheduleKey => $schedule) {
+                if ($schedule instanceof Schedule) {
                     $events = $schedule->events();
                     foreach ($events as $eventKey => $event) {
 
